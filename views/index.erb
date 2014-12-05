@@ -20,19 +20,25 @@ Basketball Courts NYC
 
 <script>
 
+var mapOptions;
+var centerLat = 40.7053804;
+var centerLon = -73.9962504;
+var zoom = 10;
+
 	var success = function(pos) {
-		var lat    = pos.coords.latitude,
-			long   = pos.coords.longitude,
-			center: new google.maps.LatLng(lat, long),
-			zoom: 4,
-			mapTypeId: google.maps.MapTypeId.roadmap
-			};		
+			centerLat = pos.coords.latitude;
+			centerLon = pos.coords.longitude;
+			zoom = 15;
+			image = '/images/yourhere.jpeg';
+			init()
 		}
 
-	function getLocation(){
+
+		function getLocation(){
 			navigator.geolocation.getCurrentPosition(success);
 			return false;
 		}
+
 
 
 	function init() {
@@ -43,10 +49,11 @@ Basketball Courts NYC
 			navigator.geolocation.getCurrentPosition('mymap');
 		}
 
-		var mapOptions = {
-			center: new google.maps.LatLng(40.7053804, -73.9962504),
-			zoom: 10,
-			mapTypeId: google.maps.MapTypeId.roadmap
+		console.log(zoom)
+		mapOptions = {
+			center: new google.maps.LatLng(centerLat, centerLon),
+			zoom: zoom,
+			matTypeId: google.maps.MapTypeId.roadmap
 			};
 
 		var map = new google.maps.Map(mapDiv, mapOptions);
