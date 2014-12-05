@@ -1,0 +1,112 @@
+Basketball Courts NYC
+
+<style>
+	#mymap{
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+<script src='/javascripts/lib/jquery.js'></script>
+
+<script src="/javascripts/lib/geoPosition.js"></script>
+
+<script type="text/javascript">
+
+</script>
+
+
+<script>
+
+	var success = function(pos) {
+		var lat    = pos.coords.latitude,
+			long   = pos.coords.longitude,
+			center: new google.maps.LatLng(lat, long),
+			zoom: 4,
+			mapTypeId: google.maps.MapTypeId.roadmap
+			};		
+		}
+
+	function getLocation(){
+			navigator.geolocation.getCurrentPosition(success);
+			return false;
+		}
+
+
+	function init() {
+		var mapDiv = document.getElementById('mymap')
+		
+		function get_location() {
+
+			navigator.geolocation.getCurrentPosition('mymap');
+		}
+
+		var mapOptions = {
+			center: new google.maps.LatLng(40.7053804, -73.9962504),
+			zoom: 10,
+			mapTypeId: google.maps.MapTypeId.roadmap
+			};
+
+		var map = new google.maps.Map(mapDiv, mapOptions);
+
+		var image = '/images/basketball.png';
+		
+		$.ajax({
+			url: '/api/courts',
+			success: function(data){
+					$(data).each(function(idx, ele){
+					(function(){
+						var court = ele;
+						
+						var latlng = new google.maps.LatLng(parseFloat(court.lat), parseFloat(court.lon));
+						
+						var marker = new google.maps.Marker({
+							position: latlng,
+							clickable: true,
+ 							icon: image,
+							animation: google.maps.Animation.DROP,
+							map: map
+						})
+					})();
+					
+				})
+			}
+		})
+
+		
+		$.ajax({
+			url: 'api/courts', 
+			success: function(data){
+			$(data).each(function(idx, e){
+					
+					(function(){
+						var court = e;
+
+						var contentString = new google.maps.ContentString(
+							parse(court.name), parse(court.location));
+
+						var infowindow =  new google.maps.InfoWindow({
+								content: contentString
+						});
+					});	
+				});		
+			}	
+		});
+	}
+
+
+	window.onload = init; 
+
+</script>
+
+<form>
+	<input type="button" onclick="getLocation()" value="Get Location">
+</form>
+
+<div id="mymap"></div>
+
+
+
+
