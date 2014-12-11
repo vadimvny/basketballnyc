@@ -17,20 +17,31 @@ Basketball Courts NYC
 
 </script>
 
+<input class="search" name="query">
+	<form action="/api/courts">
+		<input type="text" name="query" placeholder='Basketball Court'/>
+		<input type='Submit' value='searh'/>
+	</form>		
+		<ul class="court">
+		
+		</ul>
 
 <script>
+var map
+var geocoder;
+var infowindow;
 
 var mapOptions;
 var centerLat = 40.7053804;
 var centerLon = -73.9962504;
 var zoom = 10;
+var marker = '/images/yourhere.jpeg'
 
 	var success = function(pos) {
 			centerLat = pos.coords.latitude;
 			centerLon = pos.coords.longitude;
 			zoom = 15;
-			image = '/images/yourhere.jpeg';
-			init()
+			init(); 
 		}
 
 
@@ -50,6 +61,7 @@ var zoom = 10;
 		}
 
 		console.log(zoom)
+		
 		mapOptions = {
 			center: new google.maps.LatLng(centerLat, centerLon),
 			zoom: zoom,
@@ -102,7 +114,6 @@ var zoom = 10;
 			}	
 		});
 	}
-
 
 	window.onload = init; 
 

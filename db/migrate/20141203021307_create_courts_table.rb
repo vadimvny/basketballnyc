@@ -8,6 +8,7 @@ class CreateCourtsTable < ActiveRecord::Migration
   		t.float :lon
   		t.float :user_lat
   		t.float :user_lon
+  		t.string :address
   	end
   end
 end
