@@ -26,7 +26,7 @@ var CourtView = Backbone.View.extend({
 var CourtListView = Backbone.View.extend({
   initialize: function(){
     this.listenTo(this.collection, "reset", this.render);
-    this.listenTo(this.collection, "add", this.render);
+    // this.listenTo(this.collection, "add", this.render);
   },
   render: function(){
     this.$el.empty();
