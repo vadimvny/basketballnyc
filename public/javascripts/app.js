@@ -1,6 +1,8 @@
 // **** Model ****
-var Court = Backbone.Model.extend({});
-
+var Court = Backbone.Model.extend({
+  initialize: function() {
+  }
+});
 
 // **** Collection ****
 var CourtList = Backbone.Collection.extend({
@@ -8,14 +10,13 @@ var CourtList = Backbone.Collection.extend({
   url: '/api/courts'
 });
 
-
 // **** Views ****
 var CourtView = Backbone.View.extend({
   template: _.template($('#map-template').html()),
   className: 'mymap',
   
   render: function(){
-      this.$el.html(this.template(this.model.toJSON()));
+    this.$el.html(this.template(this.model.toJSON()));
     return this;
   },
 });
@@ -36,13 +37,3 @@ var CourtListView = Backbone.View.extend({
   }
 });
 
-var courts = new CourtList();
-var allCourts;
-
-$(function(){
-    allCourts = new CourtListView({
-    collection: courts,
-    el: _.template
-  });
-    courts.fetch();
-});

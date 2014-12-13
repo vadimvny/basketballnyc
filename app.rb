@@ -15,6 +15,6 @@ end
 
 get '/api/courts' do
 	content_type :json
-	court = Court.all
-	court.to_json
+	courts = Court.all
+	courts.to_json
 end
