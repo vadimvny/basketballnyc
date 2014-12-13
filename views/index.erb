@@ -1,7 +1,6 @@
 Basketball Courts NYC
  
-
-<script src="/javascripts/lib/jquery.js"></script>
+<!-- <script src="/javascripts/lib/jquery.js"></script>
 <script src="/javascripts/lib/underscore.js"></script>
 <script src="/javascripts/lib/backbone.js"></script>
 <script type='text/template' id='map-template'>
@@ -9,7 +8,7 @@ Basketball Courts NYC
 	<%%= name  %>
 </div>
 </script>
-<!-- <script src='/javascripts/app.js'></script>
+<!-- <script src='/javascripts/app.js'></script> -->
  --> 
 <script src="/javascripts/lib/geoPosition.js"></script>
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -189,19 +188,7 @@ function initialize() {
 <form>
 	<input class = 'get-location' type="button" onclick="getLocation()" value="Get Location">
 </form>
-<script>
 
-$(function(){
-
-  courts = new CourtList();
-
-  var allCourts = new CourtListView({
-                        collection: courts,
-                        el: $('#courts')
-                      });
-  courts.fetch();
-});
-</script>
 <!-- <div id="mymap"></div> -->
 
 
