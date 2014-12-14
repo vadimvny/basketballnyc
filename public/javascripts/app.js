@@ -1,5 +1,14 @@
+ 
+
 // **** Model ****
 var Court = Backbone.Model.extend({
+  defaults: {
+    name: "Court",
+    location: "Brooklyn",
+    lan: "1",
+    lon: "2",
+
+  },
   // parse: function(response){
   //   return response.court;
   // }
@@ -7,45 +16,48 @@ var Court = Backbone.Model.extend({
 
 // **** Collection ****
 var CourtList = Backbone.Collection.extend({
+  url: '/api/courts',
   model: Court,
-  url: '/api/courts'
 });
 
 // **** Views ****
 var CourtView = Backbone.View.extend({
-  // template: _.template($('#court-template').html()),
   tagName: 'li',
-      
-  render: function(){
-    // this.$el.html(this.template(this.model.toJSON()));
-    this.$el.html(this.model.get('name'));
+  template: _.template($ ('#courtTemplate').html() ),
+  
+  render: function() {
+    this.$el.html(this.template({ court: this.model.toJSON()}));
     return this;
-  },
+  },    
 });
 
 var CourtListView = Backbone.View.extend({
+  // tagname:'ul',
+  // template: _.template($('#courtTemplate').html()),
+
   initialize: function(){
-    this.listenTo(this.collection, "reset", this.render);
-    // this.listenTo(this.collection, "add", this.render);
+    this.listenTo( this.collection, 'reset', this.render );
   },
+  
   render: function(){
-    this.$el.empty();
-    var that = this;
+    // this.$el.empty();
+      var that = this;
     this.collection.each(function(court){
-      var view = new CourtView({model: court});
+      var view = new CourtView({ model: court });
       that.$el.append(view.render().$el);
     });
-    return this;
   }
 });
 
-$(function(){
+  $(function(){
+    courtList = new CourtList();
+    courtListView = new CourtListView({
+      collection: courtList,
+      el: "#courts"
+    })
+    courtList.fetch({reset: true});
+  });
 
-  courts = new CourtList();
 
-  var allCourts = new CourtListView({
-                        collection: courts,
-                        el: $('ul.courts')
-                      });
-  courts.fetch({reset:true});
-});
+ // var court = new Court
+ // var courtView = new CourtView
