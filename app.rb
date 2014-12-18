@@ -13,16 +13,6 @@ get '/' do
 	erb :index	
 end
 
-get '/courts' do
-
-	erb :root
-end
-
-get '/courtmap' do
-
-	erb :root3
-end
-
 get '/api/courts' do
 	content_type :json
 	courts = Court.all

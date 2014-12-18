@@ -1,40 +1,127 @@
-Basketball Courts NYC
- <head>
-<link rel="stylesheet" type="text/css" href="/stylesheets/styles.css">
-</head>
+<title>Basketball NYC App</title>
+
+<link rel="stylesheet" href="/stylesheets/styles.css">
+<link rel="stylesheet" href="/stylesheets/skeleton.css">
+<link rel="stylesheet" href="/stylesheets/normalize.css">
+
+
+<body onload="initialize()">
 
 <script src="/javascripts/lib/jquery.js"></script>
-<!-- <script src="/javascripts/lib/underscore.js"></script>
-<script src="/javascripts/lib/backbone.js"></script>
-<script src='/javascripts/app.js'></script> -->
+
 <script src="/javascripts/lib/geoPosition.js"></script>
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+	<h1 class='logo'> Basketball NYC App </h1>
+
+   <div class='search-box'>
+	<input id="address" type="textbox"  />
+    <input id="address-button" type="button" value="Search" onclick="getBoth()" />
+  <!--   <input id="find-me" type="button" value="Find-Me" onclick="findMe()" /> -->
+  </div>
+
+</body>
+
 <script>
 
-google.maps.visualRefresh = true; //removes the marker
-  var geocoder;
-  var map;
-  var infowindow = new google.maps.Geocoder();
-  var mapOptions;
-  var centerLat = 40.7053804;
-  var centerLon = -73.9962504;
-  var zoom = 10;
-  var marker = '/images/yourhere.jpeg'
-// 		var image = '/images/basketball.png';
-	
-// 	}
-//search the map to see the closest location on the map
+	$('#address').keyup(function(e){
+		if(e.keyCode == 13){
+			$("#address-button").click();
+		}
+	});
+
+	var width = 1300;
+	var height = 800;
+	var ball = '/images/basketball.png'
+
+      //Create SVG element
+      var svg = d3.select("body")
+                  .append("svg")
+                  .attr("width", width)
+                  .attr("height", height);
+
+      var colors = d3.scale.category20b();	 
+	 
+	 d3.json('/api/courts', function(json) {
+
+		var courts = json;
+
+		var force = d3.layout.force()
+                    .nodes(courts)
+                    .size([width, height])
+                    .start();
+
+      	var nodes = svg.selectAll("image")
+                    .data(courts)
+                    .enter()
+                      .append("image")
+                      .attr("height", 30)
+                      .attr("width", 30)
+                      .attr("xlink:href",'/images/basketball.png')	     
+    
+    force.on("tick", function() {
+     	nodes.attr("x", function(d) { return d.x; })
+             .attr("y", function(d) { return d.y; })
+      	});  
+	});
+
+	var tooltip = d3.select('circle')
+					.append('div')
+					.style("position", "absolute")
+					.style("z-index", "10")
+					.style("visibility", "hidden")
+					.text("a simple tooltip");
+
+function getBoth() {
+	$('svg').slideToggle("slow");
+	$('#map').show();
+	codeAddress();
+}
+
+
 function initialize() {
 	geocoder = new google.maps.Geocoder();
 	var latlng = new google.maps.LatLng(40.7053804, -73.9962504);
 	var mapOptions = {
-			 zoom: 14,
+		 	zoomControl: false,
+		 	scaleControl: false,
+		    scrollwheel: false,
+		    disableDoubleClickZoom: true,
+			zoom: 14,
 			center: latlng
 	}
 		map = new google.maps.Map(document.getElementById("map"), mapOptions);
 }	
 
+function findMe() {
+	// function get_location() {
+	// 	navigator.geolaction.getCurentPosition(show_map);
+	// }
+
+	// function show_map(position) {
+	// 	var lat = position.coords.latitude;
+	// 	var lon = positon.coords.longitude;
+
+	// 	alert(lat)
+	// }
+
+	if(geoPosition.init()){
+		geoPosition.getCurrentPosition(success, failure);
+	}
+
+	function success(pos){
+		var lat = pos.coords.latitude;
+		var lon = pos.coords.longitude;
+		alert(lat+', '+lon);
+	}
+
+	function failure(){
+		alert("We can't determine your location!");
+	}
+
+}
 //search
   function codeAddress() {
     var address = document.getElementById("address").value;
@@ -50,48 +137,15 @@ function initialize() {
       }
     });
   }
+
+  //get current location *****not working&
+  	// }
+  	//  if (geoPosition.init()) {
+  	//  	geoPosition.getCurrentPosition();
+  	// }  	 
   
 
-  //reverse geocode location
-  	function codeLatLng() {
-  		var url = '/api/courts?$where=within_circle'
-  		var lat = parseFloat(lat)
-  		var lng = parseFloat(lon)
-  	}
 
- //  //get current location *****not working&
-	var success = function(pos) {
-			centerLat = pos.coords.latitude;
-			centerLon = pos.coords.longitude;
-			zoom = 15;
-			ini(); 
-	}
-
-
-	function getLocation(){
-			navigator.geolocation.getCurrentPosition(success);
-			return false;
-	}
-
-
-	function init() {
-		var mapDiv = document.getElementById("map")
-		
-		function get_location() {
-
-			navigator.geolocation.getCurrentPosition("map");
-		}		
-	
-		mapOptions = {
-			center: new google.maps.LatLng(centerLat, centerLon),
-			map: map,
-			zoom: zoom,
-			matTypeId: google.maps.MapTypeId.roadmap,
-			icon: "/images/yourhere.jpeg"
-			};
-
-		var map = new google.maps.Map(mapDiv, mapOptions);
-	}
 
 //showing courts withing one mile of the user position 
 	function getResults(options) {
@@ -111,21 +165,11 @@ function initialize() {
 		});
 	}
 
-	function getLongAndLat(){
+// var iw = new google.maps.InfoWindow();
 
-	}
+// marker = new google.maps.Marker(initialize); 
 
-	function getBoth(){
-		// getLongAndLat should return a hash
-		// two keys: longitude and latitude
-		// var longAndLat = getLongAndLat();
-		// codeAddress and getResults should take
-		// an options hash. 
-		codeAddress();
-		getResults();
-		// getResults();
-	}	
-
+// google.maps.event.addListener(marker,'click', function(){
 
 	$.ajax({
 		url: '/api/courts',
@@ -135,39 +179,48 @@ function initialize() {
 					var court = ele;
 					
 					var latlng = new google.maps.LatLng(parseFloat(court.lat), parseFloat(court.lon));
-					
+
+
+
 					var marker = new google.maps.Marker({
 						position: latlng,
 						clickable: true,
 						icon: '/images/basketball.png', 
 						animation: google.maps.Animation.DROP,
-						map: map
-					})
+						map: map,
+						title: court.name
+					});
+
+					var infoWindow =  new google.maps.InfoWindow({
+					    content: ''
+					});
+
+					bindInfoWindow(marker, map, infoWindow, 'Name:' + '' + court.name + '</br>' + 'Location:' + court.location)
+
+						// iw.setContent(court.name)
+						// iw.open(marker)
 				})();
 			});
 		}
 	});
 
-  </script>
+var bindInfoWindow = function(marker, map, infowindow, html) {
+	    google.maps.event.addListener(marker, 'click', function() {
+	        infowindow.setContent(html);
+	        infowindow.open(map, marker);
+	    });
+	} 
 
-<body onload="initialize()">
-   <div>
-	<input id="address" type="textbox" value="BasketBall, NYC">
-    <input type="button" value="Search" onclick="getBoth()">
-  </div>
+
+	// google.maps.event.addListener(marker, 'click', function() {
+ //    infowindow.open(map,marker);
+
+</script>
+
  <div id="map" style="width: 100%; height: 80%;"></div>
+	<!-- 	<div id = 'courts'>
+
+	</div> -->
 </body>
 
-<form>
-	<input class = 'get-location' type="button" onclick="getLocation()" value="Get Location">
-</form>
-
-
-<h1> List Of All Basketball Courts in NYC</h1>
-<ul id  = 'courts'>
-
-	</div>
-
-
-
-
+	
