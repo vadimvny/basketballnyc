@@ -34,7 +34,7 @@
 
 	var width = 1300;
 	var height = 800;
-	var ball = '/images/basketball.png'
+	var ball = 'http://imgur.com/7XpUP9k'
 
       //Create SVG element
       var svg = d3.select("body")
@@ -59,7 +59,7 @@
                       .append("image")
                       .attr("height", 30)
                       .attr("width", 30)
-                      .attr("xlink:href",'/images/basketball.png')	     
+                      .attr("xlink:href",'http://imgur.com/7XpUP9k')	     
     
     force.on("tick", function() {
      	nodes.attr("x", function(d) { return d.x; })
@@ -185,7 +185,7 @@ function findMe() {
 					var marker = new google.maps.Marker({
 						position: latlng,
 						clickable: true,
-						icon: '/images/basketball.png', 
+						icon: 'http://imgur.com/7XpUP9k', 
 						animation: google.maps.Animation.DROP,
 						map: map,
 						title: court.name
