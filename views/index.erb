@@ -10,10 +10,10 @@
 <script src="/javascripts/lib/jquery.js"></script>
 
 <script src="/javascripts/lib/geoPosition.js"></script>
-<script src="https://maps.google.com/maps/api/js?sensor=false"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
 
-<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
         
 	<h1 class='logo'> Basketball NYC App </h1>
 
@@ -35,7 +35,6 @@
 
 	var width = 1300;
 	var height = 800;
-	var ball = 'http://i.imgur.com/7XpUP9k.png'
 
       //Create SVG element
       var svg = d3.select("body")
@@ -60,7 +59,7 @@
                       .append("image")
                       .attr("height", 30)
                       .attr("width", 30)
-                      .attr("xlink:href",'http://i.imgur.com/7XpUP9k.png')	     
+                      .attr("xlink:href",'/images/basketball.png')	     
     
     force.on("tick", function() {
      	nodes.attr("x", function(d) { return d.x; })
@@ -186,7 +185,7 @@ function findMe() {
 					var marker = new google.maps.Marker({
 						position: latlng,
 						clickable: true,
-						icon: 'http://i.imgur.com/7XpUP9k.png', 
+						icon: '/images/basketball.png', 
 						animation: google.maps.Animation.DROP,
 						map: map,
 						title: court.name
