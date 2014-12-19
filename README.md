@@ -6,7 +6,7 @@ basketballnyc
 
 ![alt tag](http://i.imgur.com/8M1nrmd.png)
 
-Enter you zipcode or address to find the nearest court court.
+Enter you zipcode or address to find the nearest court.
 
 ![alt tag](http://i.imgur.com/IPHyEem.png)
 
